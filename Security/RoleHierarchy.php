@@ -8,13 +8,15 @@ use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
  */
 class RoleHierarchy extends BaseRoleHierarchy
 {
+    protected $options;
     protected $connection;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $hierarchy, $connection)
+    public function __construct(array $options, array $hierarchy, $connection)
     {
+        $this->options = $options;
         $this->connection = $connection;
 
         return parent::__construct(array_merge($hierarchy, $this->buildHierarchy()));
@@ -52,8 +54,8 @@ class RoleHierarchy extends BaseRoleHierarchy
     {
         $query = <<<QUERY
             SELECT r.name AS role, p.name AS parent_role
-            FROM role as r
-            LEFT JOIN role as p ON p.id = r.parent_id
+            FROM {$this->options['role_table_name']} as r
+            LEFT JOIN {$this->options['role_table_name']} as p ON p.id = r.parent_id
 QUERY;
 
         return $query;

@@ -11,19 +11,19 @@ use Doctrine\DBAL\Driver\Connection;
  */
 class RoleProvider
 {
-    protected $connection;
     protected $options;
+    protected $connection;
 
     /**
      * Constructor.
      *
-     * @param Connection    $connection
      * @param array         $options
+     * @param Connection    $connection
      */
-    public function __construct(Connection $connection, $options)
+    public function __construct(array $options, Connection $connection)
     {
-        $this->connection = $connection;
         $this->options = $options;
+        $this->connection = $connection;
     }
 
     /**
@@ -36,7 +36,7 @@ class RoleProvider
     {
         $query = <<<QUERY
             SELECT r.name AS role
-            FROM role as r
+            FROM {$this->options['role_table_name']} as r
             WHERE r.name = ?
 QUERY;
         return $this->connection->fetchColumn($query, array($name), 0);
@@ -46,7 +46,7 @@ QUERY;
     {
         $queryParent = <<<QUERY
             SELECT r.id AS id
-            FROM role as r
+            FROM {$this->options['role_table_name']} as r
             WHERE r.name = ?
 QUERY;
 
@@ -56,7 +56,7 @@ QUERY;
             $parentId = null;
         }
 
-        $this->connection->insert('role', array('name' => $name, 'parent_id' => $parentId));
+        $this->connection->insert($this->options['role_table_name'], array('name' => $name, 'parent_id' => $parentId));
 
         return $name;
     }

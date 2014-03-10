@@ -8,11 +8,16 @@ parameters:
 services:
     security.role_hierarchy:
         class: %ticketpark.role_hierarchy.class%
-        arguments: [%security.role_hierarchy.roles%, @ticketpark.role_table.connection]
+        arguments:
+            - { role_table_name: %ticketpark.role_table.name% }
+            - %security.role_hierarchy.roles%
+            - @ticketpark.role_table.connection
 
     ticketpark.role.provider:
         class: %ticketpark.role.provider.class%
-        arguments: [@ticketpark.role_table.connection, []]
+        arguments:
+            - { role_table_name: %ticketpark.role_table.name% }
+            - @ticketpark.role_table.connection
 
     ticketpark.role.dbal.schema:
         class: %ticketpark.role.dbal.schema.class%
