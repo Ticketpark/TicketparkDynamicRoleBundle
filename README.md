@@ -1,4 +1,4 @@
-# TicketparkDynamicROleBundle
+# DynamicRoleBundle
 
 This Symfony2 bundle ads functionalities to dynamically create Symfony Security roles and persist them using Doctrine Dbal.
 
