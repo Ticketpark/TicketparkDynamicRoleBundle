@@ -1,3 +1,0 @@
-ticketpark_dynamic_role_homepage:
-    path:  /hello/{name}
-    defaults: { _controller: TicketparkDynamicRoleBundle:Default:index }
