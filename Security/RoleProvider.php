@@ -6,6 +6,8 @@ use Doctrine\DBAL\Driver\Connection;
 
 /**
  * A RoleProvider. Handles roles stored via DBAL as strings
+ *
+ * @author Stefan Paschke <stefan.paschke@gmail.com>
  */
 class RoleProvider
 {

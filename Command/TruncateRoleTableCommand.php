@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Schema\SchemaException;
 
 /**
- * 
+ * @author Stefan Paschke <stefan.paschke@gmail.com>
  */
 class TruncateRoleTableCommand extends ContainerAwareCommand
 {

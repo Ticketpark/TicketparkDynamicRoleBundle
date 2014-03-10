@@ -7,6 +7,8 @@ use Doctrine\DBAL\Connection;
 
 /**
  * The schema used for the dynamic roles.
+ *
+ * @author Stefan Paschke <stefan.paschke@gmail.com>
  */
 class Schema extends BaseSchema
 {

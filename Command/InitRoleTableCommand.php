@@ -9,6 +9,8 @@ use Doctrine\DBAL\Schema\SchemaException;
 
 /**
  * Installs the table required by the dynamic roles
+ *
+ * @author Stefan Paschke <stefan.paschke@gmail.com>
  */
 class InitRoleTableCommand extends ContainerAwareCommand
 {

@@ -7,6 +7,8 @@ use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 
 /**
  * Merges role schema into the given schema.
+ *
+ * @author Stefan Paschke <stefan.paschke@gmail.com>
  */
 class RoleSchemaListener
 {

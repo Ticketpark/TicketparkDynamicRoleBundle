@@ -3,7 +3,9 @@
 namespace Ticketpark\DynamicRoleBundle\Security;
 
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
-
+/**
+ * @author Stefan Paschke <stefan.paschke@gmail.com>
+ */
 class RoleHierarchy extends BaseRoleHierarchy
 {
     protected $connection;
