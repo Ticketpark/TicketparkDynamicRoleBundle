@@ -1,6 +1,11 @@
 # DynamicRoleBundle
 
 This Symfony2 bundle ads functionalities to dynamically create Symfony Security roles and persist them using Doctrine DBAL.
+We use it to generate roles that can be given permissions to particular model instances. For example, an operator role for a blog post might be
+```php
+ROLE_POST_<public_identifier>_OPERATOR
+```
+it can then be given an operator ACE for that blog post instance and be given to a Group or User instance.
 
 ## Functionalities
 * RoleProvider (Service)
