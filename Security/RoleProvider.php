@@ -30,6 +30,7 @@ class RoleProvider
      * Returns the role name
      *
      * @param string $name
+     * @param string $parentRole
      * @return string
      */
     public function findRole($name, $parentRole = null)
@@ -54,6 +55,14 @@ QUERY;
         }
     }
 
+
+    /**
+     * Creates a new role with $name
+     *
+     * @param string $name
+     * @param string $parentRole
+     * @return string
+     */
     public function createRole($name, $parentRole = null)
     {
         $query = <<<QUERY
@@ -81,5 +90,28 @@ QUERY;
         }
 
         return $name;
+    }
+
+    public function deleteRole($name)
+    {
+        $query = <<<QUERY
+            SELECT r.id AS id
+            FROM {$this->options['role_table_name']} as r
+            WHERE r.name = ?
+QUERY;
+
+        if ($id = $this->connection->fetchColumn($query, array($name), 0)) {
+            $this->connection->delete($this->options['role_table_name'], array('id' => $id));
+
+            $childrenQuery = <<<QUERY
+                SELECT r.name AS name
+                FROM {$this->options['role_table_name']} as r
+                WHERE r.parent_id = ?
+QUERY;
+
+            foreach ($this->connection->fetchAll($childrenQuery, array($id)) as $childName) {
+                $this->deleteRole($childName);
+            }
+        }
     }
 }
