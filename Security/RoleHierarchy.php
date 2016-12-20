@@ -2,7 +2,9 @@
 
 namespace Ticketpark\DynamicRoleBundle\Security;
 
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
+
 /**
  * @author Stefan Paschke <stefan.paschke@gmail.com>
  */
@@ -28,19 +30,20 @@ class RoleHierarchy extends BaseRoleHierarchy
     protected function buildHierarchy()
     {
         $hierarchy = array();
-
-        foreach ($this->connection->executeQuery($this->getFindRolesSql())->fetchAll() as $data) {
-            if ($data['parent_role']) {
-                if (!isset($hierarchy[$data['parent_role']])) {
-                    $hierarchy[$data['parent_role']] = array();
-                }
-                $hierarchy[$data['parent_role']][] = $data['role'];
-            } else {
-                if (!isset($hierarchy[$data['role']])) {
-                    $hierarchy[$data['role']] = array();
+        try {
+            foreach ($this->connection->executeQuery($this->getFindRolesSql())->fetchAll() as $data) {
+                if ($data['parent_role']) {
+                    if (!isset($hierarchy[$data['parent_role']])) {
+                        $hierarchy[$data['parent_role']] = array();
+                    }
+                    $hierarchy[$data['parent_role']][] = $data['role'];
+                } else {
+                    if (!isset($hierarchy[$data['role']])) {
+                        $hierarchy[$data['role']] = array();
+                    }
                 }
             }
-        }
+        } catch (TableNotFoundException $e) {}
 
         return $hierarchy;
     }
