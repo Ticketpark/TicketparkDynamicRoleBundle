@@ -29,15 +29,17 @@ class RoleHierarchy extends BaseRoleHierarchy
     {
         $hierarchy = array();
 
-        foreach ($this->connection->executeQuery($this->getFindRolesSql())->fetchAll() as $data) {
-            if ($data['parent_role']) {
-                if (!isset($hierarchy[$data['parent_role']])) {
-                    $hierarchy[$data['parent_role']] = array();
-                }
-                $hierarchy[$data['parent_role']][] = $data['role'];
-            } else {
-                if (!isset($hierarchy[$data['role']])) {
-                    $hierarchy[$data['role']] = array();
+        if ($this->connection->getSchemaManager()->tablesExist(array($this->options['role_table_name']))) {
+            foreach ($this->connection->executeQuery($this->getFindRolesSql())->fetchAll() as $data) {
+                if ($data['parent_role']) {
+                    if (!isset($hierarchy[$data['parent_role']])) {
+                        $hierarchy[$data['parent_role']] = array();
+                    }
+                    $hierarchy[$data['parent_role']][] = $data['role'];
+                } else {
+                    if (!isset($hierarchy[$data['role']])) {
+                        $hierarchy[$data['role']] = array();
+                    }
                 }
             }
         }
