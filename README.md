@@ -52,7 +52,8 @@ public function registerBundles()
 ```
 
 ## Caching
-To enable HierarchyRole map caching override `ticketpark.dynamic_role_cache` service
+To enable HierarchyRole map caching override `ticketpark.dynamic_role_cache` service.
+
 For example:
 
 ```
