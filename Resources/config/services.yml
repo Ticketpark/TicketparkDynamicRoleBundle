@@ -12,12 +12,14 @@ services:
             - { role_table_name: %ticketpark.role_table.name% }
             - %security.role_hierarchy.roles%
             - @ticketpark.role_table.connection
+            - "@ticketpark.dynamic_role_cache"
 
     ticketpark.role.provider:
         class: %ticketpark.role.provider.class%
         arguments:
             - { role_table_name: %ticketpark.role_table.name% }
             - @ticketpark.role_table.connection
+            - "@ticketpark.dynamic_role_cache"
 
     ticketpark.role.dbal.schema:
         class: %ticketpark.role.dbal.schema.class%
@@ -29,3 +31,7 @@ services:
         class: %ticketpark.role.dbal.schema_listener.class%
         arguments:
             - @service_container
+
+    ticketpark.dynamic_role_cache:
+        class: Doctrine\Common\Cache\VoidCache
+        public: false

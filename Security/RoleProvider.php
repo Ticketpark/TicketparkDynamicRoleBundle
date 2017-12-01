@@ -3,6 +3,7 @@
 namespace Ticketpark\DynamicRoleBundle\Security;
 
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * A RoleProvider. Handles roles stored via DBAL as strings
@@ -13,6 +14,10 @@ class RoleProvider
 {
     protected $options;
     protected $connection;
+    /**
+     * @var Cache
+     */
+    private $cache;
 
     /**
      * Constructor.
@@ -20,10 +25,11 @@ class RoleProvider
      * @param array         $options
      * @param Connection    $connection
      */
-    public function __construct(array $options, Connection $connection)
+    public function __construct(array $options, Connection $connection, Cache $cache)
     {
         $this->options = $options;
         $this->connection = $connection;
+        $this->cache = $cache;
     }
 
     /**
@@ -89,6 +95,8 @@ QUERY;
             $this->connection->insert($this->options['role_table_name'], array('name' => $name, 'parent_id' => $parentId));
         }
 
+        $this->cache->delete(RoleHierarchy::CACHE_KEY);
+
         return $name;
     }
 
@@ -112,6 +120,8 @@ QUERY;
             foreach ($this->connection->fetchAll($childrenQuery, array($id)) as $childName) {
                 $this->deleteRole($childName);
             }
+
+            $this->cache->delete(RoleHierarchy::CACHE_KEY);
         }
     }
 }
