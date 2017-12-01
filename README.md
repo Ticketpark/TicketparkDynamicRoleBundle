@@ -51,6 +51,18 @@ public function registerBundles()
 }
 ```
 
+## Caching
+To enable HierarchyRole map caching override `ticketpark.dynamic_role_cache` service
+For example:
+
+```
+    ticketpark.dynamic_role_cache:
+        class: Doctrine\Common\Cache\FilesystemCache
+        public: false
+        arguments:
+            - "%kernel.cache_dir%/dynamic_role"
+```
+
 ## License
 
 

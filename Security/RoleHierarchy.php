@@ -3,23 +3,33 @@
 namespace Ticketpark\DynamicRoleBundle\Security;
 
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
+use Doctrine\Common\Cache\Cache;
+
+
 /**
  * @author Stefan Paschke <stefan.paschke@gmail.com>
  */
 class RoleHierarchy extends BaseRoleHierarchy
 {
+    const CACHE_KEY = 'ticketpark_dynamic_role_map';
+
     protected $options;
     protected $connection;
+    /**
+     * @var Cache
+     */
+    private $cache;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $options, array $hierarchy, $connection)
+    public function __construct(array $options, array $hierarchy, $connection, Cache $cache)
     {
         $this->options = $options;
         $this->connection = $connection;
+        $this->cache = $cache;
 
-        return parent::__construct(array_merge($hierarchy, $this->buildHierarchy()));
+        parent::__construct(array_merge($hierarchy, $this->buildHierarchy()));
     }
 
     /**
@@ -61,5 +71,18 @@ class RoleHierarchy extends BaseRoleHierarchy
 QUERY;
 
         return $query;
+    }
+
+    protected function buildRoleMap()
+    {
+        if ($this->cache->contains(self::CACHE_KEY)) {
+            $this->map = $this->cache->fetch(self::CACHE_KEY);
+
+            return;
+        }
+
+        parent::buildRoleMap();
+
+        $this->cache->save(self::CACHE_KEY, $this->map, 0);
     }
 }
